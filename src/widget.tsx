@@ -4,6 +4,9 @@ import * as React from 'react';
 
 import { KernelModel } from './model';
 
+import '../style/index.css'; // Importar los estilos desde index.css
+
+
 export class KernelView extends ReactWidget {
   constructor(model: KernelModel) {
     super();
@@ -15,14 +18,10 @@ export class KernelView extends ReactWidget {
       <React.Fragment>
         <button
           key="header-thread"
-          className="jp-example-button"
+          className="jp-SineButton"
           onClick={(): void => {
-            // Código Python para calcular valores seno
-            this._model.execute(`
-import numpy as np
-result = np.sin(np.linspace(0, 2 * np.pi, 10)).tolist()
-result
-            `);
+          // Llamar al método computeSine del modelo
+          this._model.computeSine();
           }}
         >
           Compute Sine Function

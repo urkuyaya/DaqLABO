@@ -48,6 +48,18 @@ export class KernelModel {
     });
   }
 
+  /**
+   * Ejecuta el cálculo de una señal seno utilizando el kernel.
+   */
+  public computeSine(): void {
+    const code = `
+    import numpy as np
+    result = np.sin(np.linspace(0, 2 * np.pi, 10)).tolist()
+    result
+  `;
+    this.execute(code);
+  }
+
   private _onIOPub = (msg: KernelMessage.IIOPubMessage): void => {
     const msgType = msg.header.msg_type;
     switch (msgType) {

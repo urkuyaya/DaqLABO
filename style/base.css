@@ -3,6 +3,7 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
 .jp-example-view {
   background-color: aliceblue;
@@ -19,4 +20,118 @@
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
+}
+
+/* Estilos para el botón Sine */
+.jp-SineButton {
+  background-color: #007acc; /* Fondo azul */
+  color: white; /* Texto blanco */
+  border: none; /* Sin bordes */
+  border-radius: 4px; /* Esquinas redondeadas */
+  padding: 10px 20px; /* Espaciado interno */
+  font-size: 14px; /* Tamaño de fuente */
+  cursor: pointer; /* Cursor tipo botón */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra ligera */
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.jp-SineButton:hover {
+  background-color: #005fa3; /* Fondo azul oscuro */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra más intensa */
+}
+
+.jp-SineButton:active {
+  background-color: #003f73; /* Fondo aún más oscuro */
+}
+
+/* Estilos para el panel Rova */
+.jp-RovaPanel {
+  background-color: #588f68; /* Se ha puesto un color fuerte para diferenciar lo desarrollado */
+  border-left: 5px solid red; /* Borde grueso y visible */
+  padding: 16px; /* Espaciado interno */
+  font-family: Arial, sans-serif; /* Fuente clara */
+  height: 100%; /* Asegura que ocupe todo el espacio vertical */
+  width: 100%; /* Asegura que ocupe todo el espacio horizontal */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para resaltar el panel */
+}
+
+.jp-RovaPanel .jp-panel-header {
+  background-color: #4caf50; /* Verde más oscuro */
+  color: white; /* Texto blanco */
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 10px; /* Espaciado inferior */
+  border-radius: 4px; /* Bordes redondeados */
+}
+
+/* Estilos para el contenedor del sidebar */
+.jp-SidebarContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+/* Estilos para los botones del sidebar */
+.jp-SidebarButton {
+  margin: 5px 0;
+  padding: 10px;
+  background-color: #007bff; /* Fondo azul */
+  color: white; /* Texto blanco */
+  border: none; /* Sin bordes */
+  border-radius: 4px; /* Esquinas redondeadas */
+  cursor: pointer; /* Cursor tipo botón */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra ligera */
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.jp-SidebarButton:hover {
+  background-color: #0056b3; /* Fondo azul oscuro */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra más intensa */
+}
+
+.jp-SidebarButton:active {
+  background-color: #003f73; /* Fondo aún más oscuro */
+}
+
+.jp-VoltmeterWidget {
+  padding: 16px;
+  font-family: Arial, sans-serif;
+  background-color: #865e5e !important;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.jp-VoltageInput {
+  width: 100px;
+  margin-left: 8px;
+}
+
+.jp-RunButton {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: #0078d7;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.jp-RunButton:hover {
+  background-color: #005a9e;
+}
+
+/* Estilos para el contenedor principal */
+.jp-ContentContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: #f0f0f0; /* Fondo gris claro */
+  border: 1px solid #ccc; /* Borde gris claro */
+  border-radius: 4px; /* Esquinas redondeadas */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera */
 }
