@@ -101,9 +101,12 @@
 .jp-VoltmeterWidget {
   padding: 16px;
   font-family: Arial, sans-serif;
-  background-color: #865e5e !important;
+  background-color: #f9f9f9; /* Fondo gris claro */
   border: 1px solid #ccc;
   border-radius: 4px;
+  width: 80%; /* Ajusta el ancho */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  text-align: center; /* Centra el contenido */
 }
 
 .jp-VoltageInput {
@@ -112,6 +115,7 @@
 }
 
 .jp-RunButton {
+  z-index: 10; /* Asegúrate de que tenga un índice más alto que otros elementos */
   margin-top: 12px;
   padding: 8px 16px;
   background-color: #0078d7;
@@ -129,9 +133,13 @@
 .jp-ContentContainer {
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  background-color: #f0f0f0; /* Fondo gris claro */
-  border: 1px solid #ccc; /* Borde gris claro */
-  border-radius: 4px; /* Esquinas redondeadas */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  align-items: center; /* Centra los elementos horizontalmente */
+  justify-content: center; /* Centra los elementos verticalmente */
+  padding: 20px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  height: 100%; /* Asegura que ocupa todo el espacio vertical */
+  width: 100%; /* Asegura que ocupa todo el espacio horizontal */
+  overflow: auto; /* Habilita el scroll si el contenido es grande */
 }

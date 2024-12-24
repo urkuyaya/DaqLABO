@@ -9,9 +9,11 @@ import { ServiceManager } from '@jupyterlab/services';
 
 import { Widget } from '@lumino/widgets';
 
-import { KernelView } from './widget';
+//import { KernelView } from './widget';
 import { KernelModel } from './model';
-
+import { VoltmeterWidget } from './voltmeterWidget';
+import { SineWidget } from './sineWidget'; // Asegúrate de que la ruta sea correcta
+import { AmperemeterWidget } from './amperemeterWidget'; // Asegúrate de que la ruta sea correcta
 import '../style/index.css';
 
 /**
@@ -71,6 +73,7 @@ export class ExamplePanel extends Widget {
     voltmeterButton.className = 'jp-SidebarButton';
     voltmeterButton.innerHTML = `<i class="fas fa-bolt"></i> Voltmeter`;
     voltmeterButton.addEventListener('click', () => {
+      console.log('Voltmeter button pulsado'); // Debugging
       this._showPanel('Voltmeter');
     });
 
@@ -92,6 +95,7 @@ export class ExamplePanel extends Widget {
     this._contentContainer = document.createElement('div');
     this._contentContainer.className = 'jp-ContentContainer';
     this._contentContainer.style.display = 'none'; // Oculto por defecto
+    this._contentContainer.style.flexGrow = '1'; // Permite que ocupe el espacio disponible
     this.node.appendChild(this._contentContainer);
   }
 
@@ -100,6 +104,7 @@ export class ExamplePanel extends Widget {
    * @param panelType El tipo de panel a mostrar.
    */
   private _showPanel(panelType: string): void {
+    console.log(`Cambiando to panel: ${panelType}`);
     // Ocultar el sidebar
     this._sidebarContainer.style.display = 'none';
     this._contentContainer.style.display = 'block';
@@ -120,14 +125,16 @@ export class ExamplePanel extends Widget {
 
     // Agregar contenido específico
     if (panelType === 'Sine Function') {
-      const sineWidget = new KernelView(this._model);
+      const sineWidget = new SineWidget(this._model);
       this._contentContainer.appendChild(sineWidget.node);
-    } else {
-      const placeholder = document.createElement('div');
-      placeholder.textContent = `${panelType} functionality not implemented yet.`;
-      placeholder.style.padding = '16px';
-      placeholder.style.fontSize = '16px';
-      this._contentContainer.appendChild(placeholder);
+    } else if (panelType === 'Voltmeter') {
+      const voltmeterWidget = new VoltmeterWidget(this._model);
+      console.log('Voltmeter widget creado:', voltmeterWidget); // Debugging
+      this._contentContainer.appendChild(voltmeterWidget.node);
+      voltmeterWidget.update(); // Forzar la actualización del widget
+    } else if (panelType === 'Amperemeter') {
+      const amperemeterWidget = new AmperemeterWidget(this._model);
+      this._contentContainer.appendChild(amperemeterWidget.node);
     }
   }
 }

@@ -59,7 +59,29 @@ export class KernelModel {
   `;
     this.execute(code);
   }
+  /**
+   * Ejecuta el cálculo de un voltaje aleatorio.
+   */
 
+  public computeVoltage(): void {
+    const code = `
+    import random
+    result = random.uniform(0, 10)
+    result
+  `;
+    this.execute(code);
+  }
+  /**
+   * Ejecuta el cálculo de una corriente aleatoria.
+   */
+  public computeCurrent(): void {
+    const code = `
+      import random
+      result = random.uniform(0, 5)
+      result
+    `;
+    this.execute(code);
+  }
   private _onIOPub = (msg: KernelMessage.IIOPubMessage): void => {
     const msgType = msg.header.msg_type;
     switch (msgType) {
