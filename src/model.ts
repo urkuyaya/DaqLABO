@@ -75,10 +75,12 @@ export class KernelModel {
 
   public computeVoltage(): void {
     const code = `
-    
-    result = 2+3
-    result
-  `;
+import serial
+arduino = serial.Serial(port='/dev/ttyUSB0', baudrate=9600, timeout=1)
+data = arduino.readline().decode('utf-8').strip()
+arduino.close()
+data
+    `;
     console.log('Código enviado al kernel AVG:', code); // Depuración
     this.execute(code);
   }
