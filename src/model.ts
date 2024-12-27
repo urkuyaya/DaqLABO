@@ -36,13 +36,23 @@ export class KernelModel {
   }
 
   get stateChanged(): ISignal<KernelModel, void> {
+    // codigo
+    this._stateChanged.emit();
+    console.log('Signal emitido para actualizar el estado.');
+    // codigo
     return this._stateChanged;
   }
 
   execute(code: string): void {
+    console.log('Ejecutando CODE AVG'); // Depuración
+    console.log('SessionContext:', this._sessionContext);
+    console.log('Kernel:', this._sessionContext?.session?.kernel);
+
     if (!this._sessionContext || !this._sessionContext.session?.kernel) {
+      console.warn('No hay session or kernel available to execute code.');
       return;
     }
+    console.log('Código enviado al kernel AVG2:', code); // Depuración
     this.future = this._sessionContext.session?.kernel?.requestExecute({
       code
     });
@@ -65,10 +75,11 @@ export class KernelModel {
 
   public computeVoltage(): void {
     const code = `
-    import random
-    result = random.uniform(0, 10)
+    
+    result = 2+3
     result
   `;
+    console.log('Código enviado al kernel AVG:', code); // Depuración
     this.execute(code);
   }
   /**
@@ -83,6 +94,7 @@ export class KernelModel {
     this.execute(code);
   }
   private _onIOPub = (msg: KernelMessage.IIOPubMessage): void => {
+    console.log('Mensaje recibido del kernel AVG:', msg); // Depuración
     const msgType = msg.header.msg_type;
     switch (msgType) {
       case 'execute_result':

@@ -1,4 +1,4 @@
-import { SessionContext } from '@jupyterlab/apputils';
+import { SessionContext, SessionContextDialogs } from '@jupyterlab/apputils';
 import {
   ITranslator,
   nullTranslator,
@@ -6,14 +6,13 @@ import {
 } from '@jupyterlab/translation';
 
 import { ServiceManager } from '@jupyterlab/services';
-
 import { Widget } from '@lumino/widgets';
 
-//import { KernelView } from './widget';
 import { KernelModel } from './model';
 import { VoltmeterWidget } from './voltmeterWidget';
-import { SineWidget } from './sineWidget'; // Asegúrate de que la ruta sea correcta
-import { AmperemeterWidget } from './amperemeterWidget'; // Asegúrate de que la ruta sea correcta
+import { SineWidget } from './sineWidget';
+import { AmperemeterWidget } from './amperemeterWidget';
+
 import '../style/index.css';
 
 /**
@@ -29,9 +28,9 @@ export class ExamplePanel extends Widget {
   private _sessionContext: SessionContext;
   private _translator: ITranslator;
   private _trans: TranslationBundle;
-
   private _sidebarContainer: HTMLElement;
   private _contentContainer: HTMLElement;
+  private _sessionContextDialogs: SessionContextDialogs;
 
   constructor(manager: ServiceManager.IManager, translator?: ITranslator) {
     super();
@@ -48,9 +47,17 @@ export class ExamplePanel extends Widget {
       specsManager: manager.kernelspecs,
       name: 'Extension Examples'
     });
+    console.log('SessionContext creado:', this._sessionContext);
+
+    // Crear el diálogo para selección de kernel
+    this._sessionContextDialogs = new SessionContextDialogs({ translator });
+
+    // Inicializar el kernel y gestionar errores
+    this._initializeSessionContext();
 
     // Crear el modelo
     this._model = new KernelModel(this._sessionContext);
+    console.log('KernelModel inicializado:', this._model);
 
     // Contenedor principal
     this.node.style.display = 'flex';
@@ -60,6 +67,41 @@ export class ExamplePanel extends Widget {
     this._sidebarContainer = document.createElement('div');
     this._sidebarContainer.className = 'jp-SidebarContainer';
 
+    // Botones del Sidebar
+    this._addSidebarButtons();
+
+    // Content Container: Contenedor para los paneles específicos
+    this._contentContainer = document.createElement('div');
+    this._contentContainer.className = 'jp-ContentContainer';
+    this._contentContainer.style.display = 'none';
+    this._contentContainer.style.flexGrow = '1';
+    this.node.appendChild(this._contentContainer);
+  }
+
+  /**
+   * Inicializa el SessionContext, asegurando un kernel activo.
+   */
+  private async _initializeSessionContext(): Promise<void> {
+    try {
+      const initialized = await this._sessionContext.initialize();
+      if (initialized) {
+        await this._sessionContextDialogs.selectKernel(this._sessionContext);
+        console.log(
+          'Kernel inicializado:',
+          this._sessionContext.session?.kernel
+        );
+      } else {
+        console.warn('SessionContext no inicializado correctamente.');
+      }
+    } catch (error) {
+      console.error('Error al inicializar el SessionContext:', error);
+    }
+  }
+
+  /**
+   * Agrega los botones del Sidebar.
+   */
+  private _addSidebarButtons(): void {
     // Botón del osciloscopio
     const oscilloscopeButton = document.createElement('button');
     oscilloscopeButton.className = 'jp-SidebarButton';
@@ -73,7 +115,7 @@ export class ExamplePanel extends Widget {
     voltmeterButton.className = 'jp-SidebarButton';
     voltmeterButton.innerHTML = `<i class="fas fa-bolt"></i> Voltmeter`;
     voltmeterButton.addEventListener('click', () => {
-      console.log('Voltmeter button pulsado'); // Debugging
+      console.log('Voltmeter button pulsado');
       this._showPanel('Voltmeter');
     });
 
@@ -85,18 +127,11 @@ export class ExamplePanel extends Widget {
       this._showPanel('Sine Function');
     });
 
-    // Añadir los botones al contenedor del sidebar
+    // Añadir los botones al Sidebar
     this._sidebarContainer.appendChild(oscilloscopeButton);
     this._sidebarContainer.appendChild(voltmeterButton);
     this._sidebarContainer.appendChild(sineButton);
     this.node.appendChild(this._sidebarContainer);
-
-    // Content Container: Contenedor para los paneles específicos
-    this._contentContainer = document.createElement('div');
-    this._contentContainer.className = 'jp-ContentContainer';
-    this._contentContainer.style.display = 'none'; // Oculto por defecto
-    this._contentContainer.style.flexGrow = '1'; // Permite que ocupe el espacio disponible
-    this.node.appendChild(this._contentContainer);
   }
 
   /**
@@ -104,15 +139,12 @@ export class ExamplePanel extends Widget {
    * @param panelType El tipo de panel a mostrar.
    */
   private _showPanel(panelType: string): void {
-    console.log(`Cambiando to panel: ${panelType}`);
-    // Ocultar el sidebar
+    console.log(`Cambiando a panel: ${panelType}`);
     this._sidebarContainer.style.display = 'none';
     this._contentContainer.style.display = 'block';
-
-    // Limpiar contenido previo
     this._contentContainer.innerHTML = '';
 
-    // Crear un botón "Back"
+    // Botón "Back"
     const backButton = document.createElement('button');
     backButton.className = 'jp-BackButton';
     backButton.textContent = 'Back';
@@ -120,18 +152,16 @@ export class ExamplePanel extends Widget {
       this._contentContainer.style.display = 'none';
       this._sidebarContainer.style.display = 'flex';
     });
-
     this._contentContainer.appendChild(backButton);
 
-    // Agregar contenido específico
+    // Mostrar el contenido específico
     if (panelType === 'Sine Function') {
       const sineWidget = new SineWidget(this._model);
       this._contentContainer.appendChild(sineWidget.node);
     } else if (panelType === 'Voltmeter') {
       const voltmeterWidget = new VoltmeterWidget(this._model);
-      console.log('Voltmeter widget creado:', voltmeterWidget); // Debugging
       this._contentContainer.appendChild(voltmeterWidget.node);
-      voltmeterWidget.update(); // Forzar la actualización del widget
+      voltmeterWidget.update();
     } else if (panelType === 'Amperemeter') {
       const amperemeterWidget = new AmperemeterWidget(this._model);
       this._contentContainer.appendChild(amperemeterWidget.node);

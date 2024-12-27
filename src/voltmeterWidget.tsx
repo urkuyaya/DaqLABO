@@ -24,22 +24,24 @@ export class VoltmeterWidget extends ReactWidget {
           className="jp-RunButton"
           onClick={() => {
             // Enviar comando al kernel para simular un voltaje
-            this._model.execute(`
-import random
-result = random.uniform(0, 10)
-result
-          `);
+            console.log('Boton pulsado'); // Depuración
+            this._model.computeVoltage();
           }}
         >
           Measure Voltage
         </button>
         <UseSignal signal={this._model.stateChanged}>
-          {(): JSX.Element => (
-            <div>
-              <label>Voltage: </label>
-              <span>{this._model.output ? JSON.stringify(this._model.output) : '---'}</span>
-            </div>
-          )}
+          {(): JSX.Element => {
+            console.log('Signal recibido en UseSignal.');
+            console.log('Resultado actual del modelo:', this._model.output);
+            // Este es el bloque correcto con el `return` bien posicionado
+            return (
+              <div>
+                <label>Voltage: </label>
+                <span>{this._model.output ? JSON.stringify(this._model.output) : '---'}</span>
+              </div>
+            );
+          }}
         </UseSignal>
       </React.Fragment>
     );
