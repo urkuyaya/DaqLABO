@@ -69,6 +69,46 @@ export class KernelModel {
   `;
     this.execute(code);
   }
+
+  // CODIGO PUERTO SERIAL
+  public startSerial(): void {
+    const code = `
+import serial
+import time
+import json
+
+arduino = serial.Serial(port='/dev/ttyUSB0', baudrate=9600, timeout=1)
+arduino.write(b'START')
+
+while True:
+    data = arduino.readline()
+    if data:
+        try:
+            parsed_data = json.loads(data.decode('utf-8').strip())
+        except json.JSONDecodeError:
+            parsed_data = {"timestamp": 0, "voltage": 0.0, "error": "Invalid JSON format"}
+    else:
+        parsed_data = {"timestamp": 0, "voltage": 0.0, "error": "No data received"}
+
+    print(parsed_data)
+    time.sleep(1)  # Esperar 1 segundo antes de la siguiente lectura
+  `;
+    console.log('Código enviado al kernel para iniciar lectura serial:', code);
+    this.execute(code);
+  }
+
+  public stopSerial(): void {
+    const code = `
+  # Verificar si el objeto arduino existe y está abierto
+  if 'arduino' in globals() and arduino.is_open:
+      arduino.write(b'STOP\\n')
+      arduino.close()
+  'Serial communication stopped.'
+    `;
+    console.log('Código enviado al kernel para detener lectura serial:', code);
+    this.execute(code);
+  }
+
   /**
    * Ejecuta el cálculo de un voltaje aleatorio.
    */
